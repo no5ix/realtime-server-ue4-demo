@@ -201,7 +201,7 @@ int main(int argc, char* argv[])
     FLAGS_alsologtostderr = CONF.get<bool> ("log.term");
     FLAGS_max_log_size = CONF.get<int> ("log.max_size");
 
-    LOG(INFO)<< "PServer start...";
+    LOG(INFO)<< "JoyServer start...";
     /// 检查是否为daemon运行,并切换运行方式
     if (CONF.get<bool> ("srv.daemon"))
     {
@@ -231,7 +231,7 @@ int main(int argc, char* argv[])
 #else
     signal_handle();
 #endif
-    LOG(INFO)<< "PServer finish." << std::endl;
+    LOG(INFO)<< "JoyServer finish." << std::endl;
     /// 停止glog
     google::ShutdownGoogleLogging();
 

@@ -29,7 +29,7 @@ class Process: public boost::enable_shared_from_this<Process>
         {
             return 0;
         }
-        int stop(const int cnt=1);
+		int stop(const int cnt=1) {};
 
         int process(server_handler_type &handler, Worker* worker)
         {

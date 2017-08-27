@@ -331,7 +331,7 @@ private boost::noncopyable
                 BOOST_ASSERT(work_service_ != 0);
 
                 if (timer_count_ == 0)
-                set_expiry(timeout_seconds_);
+					set_expiry(timeout_seconds_);
 
                 try{
                    peer_ = socket_->remote_endpoint().address().to_string();

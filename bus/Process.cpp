@@ -8,22 +8,6 @@
 
 #include "Heartbeat.hpp"
 #include "Test.hpp"
-// #include "FormulaCombine.hpp"
-// #include "GetUniverseItem.hpp"
-// #include "GongfaSystem.hpp"
-// #include "PvpCounterAtk.hpp"
-// #include "PvpData.hpp"
-// #include "PvpFight.hpp"
-// #include "PvpFightRecord.hpp"
-#include "PvpFightResult.hpp"
-#include "PvpGetRival.hpp"
-#include "PvpGetUniverseRival.hpp"
-// #include "PvpPlunder.hpp"
-// #include "PvpSpy.hpp"
-// #include "PvpTeam.hpp"
-// #include "PvpTreasure.hpp"
-// #include "Ranking.hpp"
-// #include "SkillLevelUp.hpp"
 
 
 namespace bus {
@@ -62,23 +46,7 @@ void Process::deal_done()
 	{
 		CASE_PROC(TEST, Test);
 
-		// CASE_PROC(FORMULA_COMBINE, FormulaCombine);
-		// CASE_PROC(GET_UNIVERSE_ITEM, GetUniverseItem);
-		// CASE_PROC(GONGFA_SYSTEM, GongfaSystem);
 		CASE_PROC(HEART_BEAT, Heartbeat);
-		// CASE_PROC(PVP_COUNTER_ATK, PvpCounterAtk);
-		// CASE_PROC(PVP_DATA, PvpData);
-		// CASE_PROC(PVP_FIGHT, PvpFight);
-		// CASE_PROC(PVP_FIGHT_RECORD, PvpFightRecord);
-		CASE_PROC(PVP_FIGHT_RESULT, PvpFightResult);
-		CASE_PROC(PVP_GET_RIVAL, PvpGetRival);
-		CASE_PROC(PVP_GET_UNIVERSE_RIVAL, PvpGetUniverseRival);
-		// CASE_PROC(PVP_PLUNDER, PvpPlunder);
-		// CASE_PROC(PVP_RANKING, Ranking);
-		// CASE_PROC(PVP_SPY, PvpSpy);
-		// CASE_PROC(PVP_TEAM, PvpTeam);
-		// CASE_PROC(PVP_TREASURE, PvpTreasure);
-		// CASE_PROC(SKILL_LEVELUP, SkillLevelUp);
 
 		default:
 		{
@@ -136,23 +104,7 @@ void Process::deal(server_handler_type *handler, Worker* worker)
 	{
 		CASE_PROC(TEST, Test);
 		
-		// CASE_PROC(FORMULA_COMBINE, FormulaCombine);
-		// CASE_PROC(GET_UNIVERSE_ITEM, GetUniverseItem);
-		// CASE_PROC(GONGFA_SYSTEM, GongfaSystem);
 		CASE_PROC(HEART_BEAT, Heartbeat);
-		// CASE_PROC(PVP_COUNTER_ATK, PvpCounterAtk);
-		// CASE_PROC(PVP_DATA, PvpData);
-		// CASE_PROC(PVP_FIGHT, PvpFight);
-		// CASE_PROC(PVP_FIGHT_RECORD, PvpFightRecord);
-		CASE_PROC(PVP_FIGHT_RESULT, PvpFightResult);
-		CASE_PROC(PVP_GET_RIVAL, PvpGetRival);
-		CASE_PROC(PVP_GET_UNIVERSE_RIVAL, PvpGetUniverseRival);
-		// CASE_PROC(PVP_PLUNDER, PvpPlunder);
-		// CASE_PROC(PVP_RANKING, Ranking);
-		// CASE_PROC(PVP_SPY, PvpSpy);
-		// CASE_PROC(PVP_TEAM, PvpTeam);
-		// CASE_PROC(PVP_TREASURE, PvpTreasure);
-		// CASE_PROC(SKILL_LEVELUP, SkillLevelUp);
 
 		default:
 		{

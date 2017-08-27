@@ -21,13 +21,6 @@ using namespace bas;
 
 namespace bus {
 
-const int base_honor[] = { 100, 200, 250, 300, 350, 400 }; //各段位基础荣誉值
-const float beauty_honor_add[] = { 0.05, 0.09, 0.13, 0.17, 0.21, 0.25, 0.3 };//妖姬加成  TODO改为读表
-const int drum_id = 34023; //战鼓道具ID
-const int mirror_id = 34020; //昆仑镜道具ID
-const int treasure_id = 36000; //稀世珍宝道具ID
-
-const bool b_log_ingot = true;//CONF.get<bool>("log.ingot"); //是否记录元宝变更
 
 enum RET_CODE { //定义各种返回值
 	RET_NORMAL				= 0,	//正常
@@ -61,15 +54,11 @@ enum RET_CODE { //定义各种返回值
 
 	RET_MAX_CODE
 };
-// 奖励事件对应的事件类型 对应策划表svn目录：14_福利系统/事件类型表
-// 调用函数如下函数来更新事件的参数 这里的事件参数分为叠加的和直接更新的 比如：次数+1 战斗力更新为500：
-// 特别注意：这里一些次数是直接累加的 所以函数调用者需要确定事件成功了和不重复提交
-// int  updateEventTimes(int player_id, int event_type, int event_args);
 
 enum EVENT_TYPE
 {
 	
-	TEST_EVENT          = 1333, // 每日观想次数
+	TEST_EVENT          = 1333, 
 };
        
 class Process;

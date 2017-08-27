@@ -4,7 +4,7 @@
  */
 
 #include "Test.hpp"
-#include "DGetData.hpp"
+//#include "DGetData.hpp"
 
 namespace bus
 {
@@ -63,10 +63,6 @@ int DbTest::getData(Json &_qry, Json &_ack)
 	mysql_free_result(_result);
 
 	if (!g_m_cpool.count(realm_id)) return -1;
-	int ret = g_m_cpool.find(realm_id)->second->_get_data->getPlayerData(player_id, _ack);
-	if (ret) return ret;
-	ret = g_m_cpool.find(2)->second->_get_data->getPlayerData(81, _ack);
-	if (ret) return ret;
 	return RET_NORMAL;
 }
 
