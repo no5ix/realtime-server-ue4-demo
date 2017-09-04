@@ -61,7 +61,7 @@ int Config::parse(int argc, char* argv[])
             ("db.ports", b::program_options::value<std::string>()->default_value("3306"), "all db ports")
             ("db.dbs", b::program_options::value<std::string>()->default_value("base_td"), "all db databases")
             ("db.users", b::program_options::value<std::string>()->default_value("root"), "all db users")
-            ("db.passwds", b::program_options::value<std::string>()->default_value("mobi2us"), "all db passwords")
+            ("db.passwds", b::program_options::value<std::string>()->default_value("6"), "all db passwords")
 
             ("mysql.server,x", b::program_options::value<std::string>()->default_value("localhost"),"mysql server")
             ("mysql.port,X",b::program_options::value<int>()->default_value(3306),"mysql server port")

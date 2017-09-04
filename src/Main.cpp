@@ -133,7 +133,7 @@ int set_dbs()
         return ret;
     }
     
-    clog << "realm_cnt = " << g_realm_cnt << endl;
+    //clog << "realm_cnt = " << g_realm_cnt << endl;
     for (int i = 0; i < g_realm_cnt; ++i)
     {
         DB db_server;
@@ -146,13 +146,13 @@ int set_dbs()
         db_server.timeout = CONF.get<int>("mysql.wait_timeout");
         db_server.interactive_timeout = CONF.get<int>("mysql.interactive_timeout");
 
-        clog << "-------------------------------------" << endl;
-        clog << "db_server.realm_id = " << db_server.realm_id << endl;
-        clog << "db_server.server   = " << db_server.server << endl;
-        clog << "db_server.port     = " << db_server.port << endl;
-        clog << "db_server.db       = " << db_server.db << endl;
-        clog << "db_server.user     = " << db_server.user << endl;
-        clog << "db_server.passwd   = " << db_server.passwd << endl;
+        // clog << "-------------------------------------" << endl;
+        // clog << "db_server.realm_id = " << db_server.realm_id << endl;
+        // clog << "db_server.server   = " << db_server.server << endl;
+        // clog << "db_server.port     = " << db_server.port << endl;
+        // clog << "db_server.db       = " << db_server.db << endl;
+        // clog << "db_server.user     = " << db_server.user << endl;
+        // clog << "db_server.passwd   = " << db_server.passwd << endl;
         
         g_v_db.push_back(db_server);
     }

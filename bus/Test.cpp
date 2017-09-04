@@ -36,7 +36,7 @@ ERROR_PARAM:
 
 int BusTest::checkQryParam()
 {
-	if (_qry.get<int>("pvp_id", -1) < 1)
+	if (_qry.get<int>("player_id", -1) < 1)
 		return RET_PARAM_ERR;
 	return RET_NORMAL;
 }
@@ -45,24 +45,28 @@ int DbTest::getData(Json &_qry, Json &_ack)
 {
 	boost::unique_lock<boost::shared_mutex> lock(_mutex);
 	        
-	int pvp_id = _qry.get<int>("pvp_id");
+	int player_id = _qry.get<int>("player_id");
 	
-	sprintf(_sql, "SELECT rank_level, player_id, realm_id FROM pvp WHERE pvp_id = %d", pvp_id);
+	sprintf(_sql, "SELECT player_id, age, sex FROM player_data WHERE player_id = %d", player_id);
 	if (0 != query())
 		return RET_DB_QUERY_ERR;
-	int rank_level = -1;
-	int realm_id = -1;
-	int player_id = -1;
+
+	clog << "player_id = " << player_id << endl;
 
 	if (NULL != (_row = mysql_fetch_row(_result)))
 	{
-		rank_level = ATOI(_row[0]);
-		player_id = ATOI(_row[1]);
-		realm_id = ATOI(_row[2]);
+		_ack.put("player_id", ATOI(_row[0]));
+		_ack.put("age", ATOI(_row[1]));
+		_ack.put("sex", _row[2]);
+	}
+	else
+	{
+		_ack.put("player_id", -1);
+		_ack.put("age", -1);
+		_ack.put("sex", "");
 	}
 	mysql_free_result(_result);
 
-	if (!g_m_cpool.count(realm_id)) return -1;
 	return RET_NORMAL;
 }
 

@@ -13,6 +13,9 @@
 - boost库
 - MySQL数据库
 - google-glog日志记录框架
+- curl库
+
+> sudo apt-get install g++ make libboost-all-dev libmysqlclient-dev libgoogle-glog-dev libcurl4-gnutls-dev
 
 主要处理游戏客户端和游戏数据库的数据交换。
 通信采用socket发送协议包的方式，服务器根据协议包命令码去做相应的逻辑处理，并将处理结果
@@ -59,3 +62,4 @@ Worker将返回数据递交给线程并返回给客户端
 - 新业务协议的添加略显繁琐, business模块可以遵循开闭原则来适当重构
 - 编写维护工具
 - 数据传输协议待优化
+- 编写测试工具
