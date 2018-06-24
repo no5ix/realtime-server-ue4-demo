@@ -651,7 +651,7 @@ void ARealTimeSrvPawn::Read( InputBitStream& inInputStream )
 		{
 			SetPlayerId( playerId );
 			mPlayerIDAlreadySetFlag = true;
-			readState |= ECRS_PlayerId;
+			readState |= EPS_PlayerId;
 
 			R_LOG_M( "READ!!! GetPlayerId() = %d", GetPlayerId() );
 
@@ -716,10 +716,6 @@ void ARealTimeSrvPawn::Read( InputBitStream& inInputStream )
 	inInputStream.Read( stateBit );
 	if ( stateBit )
 	{
-		inInputStream.Read( mVelocity.X );
-		inInputStream.Read( mVelocity.Y );
-		inInputStream.Read( mVelocity.Z );
-
 		//SetActionEntityVelocity( replicatedVelocity );
 
 		inInputStream.Read( mLocation.X );
@@ -734,16 +730,20 @@ void ARealTimeSrvPawn::Read( InputBitStream& inInputStream )
 
 		//SetRotation( replicatedRotation );
 
+		inInputStream.Read( mVelocity.X );
+		inInputStream.Read( mVelocity.Y );
+		inInputStream.Read( mVelocity.Z );
+
 		inInputStream.Read( mCameraRotation.Pitch );
 		inInputStream.Read( mCameraRotation.Yaw );
 		inInputStream.Read( mCameraRotation.Roll );
 
 		//SetActionPawnCameraRotation(mActionPawnCameraRotation);
 
-		readState |= ECRS_Pose;
+		readState |= EPS_Pose;
 	}
 
-	if ( ( readState & ECRS_PlayerId ) != 0 )
+	if ( ( readState & EPS_PlayerId ) != 0 )
 	{
 		InitAfterCreate();
 	}
@@ -792,7 +792,7 @@ void ARealTimeSrvPawn::InitAfterCreate()
 
 void ARealTimeSrvPawn::ReplayForLocalPawn( uint32_t inReadState )
 {
-	if ( ( inReadState & ECRS_Pose ) != 0 )
+	if ( ( inReadState & EPS_Pose ) != 0 )
 	{
 		const ActionList& moveList = InputMgr::sInstance->GetActionList();
 
@@ -806,7 +806,7 @@ void ARealTimeSrvPawn::ReplayForLocalPawn( uint32_t inReadState )
 
 void ARealTimeSrvPawn::ReplayForRemotePawn( uint32_t inReadState )
 {
-	if ( ( inReadState & ECRS_Pose ) != 0 )
+	if ( ( inReadState & EPS_Pose ) != 0 )
 	{
 		float rtt = NetworkMgr::sInstance->GetRoundTripTime();
 		float deltaTime = 1.f / 30.f;

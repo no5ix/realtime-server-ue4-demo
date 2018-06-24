@@ -20,16 +20,16 @@ class ARealTimeSrvEntity : public APawn
 public:
 	// 'GOBJ' = 1196376650;
 	virtual uint32_t GetClassId() const /*{ return 'GOBJ'; }*/ ;
-	//virtual uint32_t GetClassId() const { return 1196376650; }
 
-	enum ECatReplicationState
+	enum EReplicationState
 	{
-		ECRS_Pose = 1 << 0,
-		ECRS_Color = 1 << 1,
-		ECRS_PlayerId = 1 << 2,
-		ECRS_Health = 1 << 3,
+		EPS_Pose = 1 << 0,
+		EPS_PlayerId = 1 << 1,
+		//ECRS_Health = 1 << 2,
 
-		ECRS_AllState = ECRS_Pose | ECRS_Color | ECRS_PlayerId | ECRS_Health
+		EPS_AllState = EPS_Pose
+		| EPS_PlayerId
+		//| ECRS_Health
 	};
 
 public:
