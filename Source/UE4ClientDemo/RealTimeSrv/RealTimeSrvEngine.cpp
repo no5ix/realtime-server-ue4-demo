@@ -22,7 +22,7 @@ URealTimeSrvEngine::URealTimeSrvEngine( const FObjectInitializer& ObjectInitiali
 
 	// ...
 
-	IP = TEXT( "172.96.239.56" );
+	IP = TEXT( "192.168.56.104" );
 	Port = 44444;
 	Player_Name = TEXT( "RealTimeSrvTestPlayerName" );
 
