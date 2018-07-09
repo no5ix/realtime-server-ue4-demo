@@ -1,8 +1,9 @@
 
  
-# A UE4 demo for [realtime-server](https://github.com/no5ix/realtime-server)
+# A State Sync UE4 demo for [realtime-server](https://github.com/no5ix/realtime-server)
 
-为[realtime-server](https://github.com/no5ix/realtime-server)而写的一个UE4前端demo
+
+为[realtime-server](https://github.com/no5ix/realtime-server)而写的一个UE4状态同步demo
 
 
 ![UE4DemoScreenshot.png](./img/UE4DemoScreenshot.png)
@@ -28,22 +29,16 @@
 # About This 
 
 
-- Video Preview 视频演示 : [Click me 点我](https://hulinhong.com)
--
-- State Sync 状态同步
-- 
-- No Replication component from UE4, just socket
-- 没有用UE4的网络同步组件, 唯socket而已
--
-- Unreal Engine Version : 4.16 - 4.19
-- 虚幻引擎版本 : 兼容 4.16 - 4.19
--
-- A [realtime-server example](https://github.com/no5ix/realtime-server/tree/master/example/for_ue4_demo) for this UE4 demo
-- 为这个 UE4 的demo写了一个[realtime-server的例子](https://github.com/no5ix/realtime-server/tree/master/example/for_ue4_demo)
 
+- [Video Preview 视频演示](https://hulinhong.com)
+- State Sync 状态同步
+- No replication component from UE4, just socket 没有用UE4的网络同步组件, 唯socket而已
+- UE4: 4.16 - 4.19
+- Server side 服务端 : [realtime-server example](https://github.com/no5ix/realtime-server/tree/master/example/for_ue4_demo)
 
 
 # Usage
+
 
 ![UE4DemoUsage.jpg](./img/UE4DemoUsage.jpg)
 
