@@ -4,6 +4,7 @@
 
 #include "GameFramework/Pawn.h"
 #include "BitStream.h"
+#include "RealTimeSrvHelper.h"
 #include <memory>
 #include "RealTimeSrvEntity.generated.h"
 
@@ -54,9 +55,11 @@ public:
 	void	SetIndexInWorld( int inIndex ) { mIndexInWorld = inIndex; }
 	int		GetIndexInWorld()				const { return mIndexInWorld; }
 
-	bool DoesWantToDie() const { return false; }
 
-	virtual void	HandleDying() { Destroy(); }
+	bool		DoesWantToDie()				const				{ return mDoesWantToDie; }
+	void		SetDoesWantToDie( bool inWants )				{ mDoesWantToDie = inWants; }
+
+	virtual void	HandleDying() {  Destroy(); }
 
 	const FVector&		GetLocation()				const { return mLocation; }
 	void		SetLocation( const FVector& inLocation ) { mLocation = inLocation; }

@@ -80,12 +80,10 @@ void ReplicationMgr::ReadAndDoUpdateAction( InputBitStream& inInputStream, int i
 
 void ReplicationMgr::ReadAndDoDestroyAction( InputBitStream& inInputStream, int inNetworkId )
 {
-//	//if something was destroyed before the create went through, we'll never get it
-//	//but we might get the destroy request, so be tolerant of being asked to destroy something that wasn't created
-//	GameObjectPtr gameObject = NetworkManagerClient::sInstance->GetGameObject( inNetworkId );
-//	if (gameObject)
-//	{
-//		gameObject->SetDoesWantToDie( true );
-//		NetworkManagerClient::sInstance->RemoveFromNetworkIdToGameObjectMap( gameObject );
-//	}
+	RealTimeSrvEntityPtr gameObject = NetworkMgr::sInstance->GetGameObject( inNetworkId );
+	if (gameObject)
+	{
+		gameObject->SetDoesWantToDie( true );
+		NetworkMgr::sInstance->RemoveFromNetworkIdToGameObjectMap( gameObject );
+	}
 }
