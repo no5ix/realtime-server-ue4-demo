@@ -39,10 +39,10 @@ NetworkMgr::NetworkMgr() :
 	mSocket = NULL;
 }
 
-void NetworkMgr::StaticInit( const FString& inIP, int inPort, const FString& inPlayerName )
+void NetworkMgr::StaticInit( const FString& inIP, int inPort )
 {
 	sInstance.reset( new NetworkMgr() );
-	return sInstance->Init("ActionUDPSocket", inIP, inPort, inPlayerName );
+	return sInstance->Init("ActionUDPSocket", inIP, inPort );
 }
 
 void NetworkMgr::Update()
@@ -54,10 +54,8 @@ void NetworkMgr::Update()
 	SendOutgoingPackets();
 }
 
-void NetworkMgr::Init( const FString& inYourChosenSocketName, const FString& inIP, const int32 inPort, const FString& inPlayerName )
+void NetworkMgr::Init( const FString& inYourChosenSocketName, const FString& inIP, const int32 inPort )
 {
-
-	mPlayerName = inPlayerName;
 
 	RealTimeSrvSocketUtil::CreateUDPSocket( mSocket, inYourChosenSocketName );
 
@@ -97,7 +95,6 @@ void NetworkMgr::SendHelloPacket()
 	OutputBitStream helloPacket;
 
 	helloPacket.Write( kHelloCC );
-	//helloPacket.Write( std::string( TCHAR_TO_UTF8( *mPlayerName ) ) );
 
 	SendPacket( helloPacket );
 	

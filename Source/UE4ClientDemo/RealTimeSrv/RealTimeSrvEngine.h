@@ -32,9 +32,6 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = RealTimeSrvEngine)
 		int Port;
 
-	UPROPERTY( EditAnywhere, BlueprintReadWrite, Category = RealTimeSrvEngine )
-		FString Player_Name;
-
 public:
 	/** default inventory list */
 	UPROPERTY( EditAnywhere, Category = RealTimeSrvEngine )

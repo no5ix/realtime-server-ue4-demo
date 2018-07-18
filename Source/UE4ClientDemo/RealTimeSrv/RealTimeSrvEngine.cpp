@@ -24,7 +24,6 @@ URealTimeSrvEngine::URealTimeSrvEngine( const FObjectInitializer& ObjectInitiali
 
 	IP = TEXT( "192.168.56.104" );
 	Port = 44444;
-	Player_Name = TEXT( "RealTimeSrvTestPlayerName" );
 
 	// set default pawn class to our Blueprinted character
 	static ConstructorHelpers::FClassFinder<APawn> PlayerPawnBPClass( TEXT( "/Game/RealTimeSrv/Script/BP_RealTimeSrvPawn" ) );
@@ -46,7 +45,7 @@ void URealTimeSrvEngine::BeginPlay()
 	RealTimeSrvEntityFactory::StaticInit( GetWorld() );
 	RealTimeSrvEntityFactory::sInstance->SetDefaultPawnClass( DefaultPawnClass );
 
-	NetworkMgr::StaticInit( IP, Port, Player_Name );
+	NetworkMgr::StaticInit( IP, Port );
 }
 
 void URealTimeSrvEngine::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)

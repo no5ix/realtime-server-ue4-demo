@@ -45,7 +45,7 @@ public:
 public:
 	static std::unique_ptr<NetworkMgr>	sInstance;
 
-	static void StaticInit( const FString& inIP, int inPort, const FString& inPlayerName );
+	static void StaticInit( const FString& inIP, int inPort );
 	
 	void	Update();
 
@@ -91,8 +91,7 @@ private:
 	void Init(
 		const FString& inYourChosenSocketName,
 		const FString& inIP,
-		const int32 inPort,
-		const FString& inPlayerName );
+		const int32 inPort );
 
 	void	HandleResetPacket();
 	void	HandleWelcomePacket( InputBitStream& inInputStream );
@@ -121,8 +120,6 @@ private:
 
 	TSharedPtr<FInternetAddr>	mRemoteAddr;
 	FSocket*					mSocket;
-
-	FString						mPlayerName;
 
 	NetworkClientState			mState;
 
