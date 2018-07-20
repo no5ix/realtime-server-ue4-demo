@@ -40,7 +40,7 @@ public:
 	static const int		kMaxPacketsPerFrameCount = 10;
 
 	static float kTimeBufferStatePackets;
-	static float kTimeBetweenStatePackets;
+	static double kTimeBetweenStatePackets;
 
 public:
 	static std::unique_ptr<NetworkMgr>	sInstance;

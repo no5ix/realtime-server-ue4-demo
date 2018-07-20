@@ -13,7 +13,7 @@
 std::unique_ptr<NetworkMgr> NetworkMgr::sInstance;
 
 float NetworkMgr::kTimeBufferStatePackets = 0.132f;
-float NetworkMgr::kTimeBetweenStatePackets = 0.033f;
+double NetworkMgr::kTimeBetweenStatePackets = 0.033;
 
 namespace
 {
