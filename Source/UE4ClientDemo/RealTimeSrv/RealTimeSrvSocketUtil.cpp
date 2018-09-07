@@ -30,7 +30,11 @@ bool RealTimeSrvSocketUtil::CreateInternetAddress( TSharedPtr<FInternetAddr>& in
 	return bIsValid;
 }
 
-bool RealTimeSrvSocketUtil::SendTo( FSocket*& inSocket, const OutputBitStream& inOutputStream, int32& inByteSent, const TSharedPtr<FInternetAddr>& inRemoteAddr )
+bool RealTimeSrvSocketUtil::SendTo( FSocket*& inSocket,
+	const void* data,
+	int len,
+	int32& inByteSent,
+	const TSharedPtr<FInternetAddr>& inRemoteAddr )
 {
 	if ( !inSocket )
 	{
@@ -40,8 +44,7 @@ bool RealTimeSrvSocketUtil::SendTo( FSocket*& inSocket, const OutputBitStream& i
 		return false;
 	}
 
-	inSocket->SendTo( ( uint8* )inOutputStream.GetBufferPtr(), inOutputStream.GetByteLength(), inByteSent, *inRemoteAddr );
-
+	inSocket->SendTo( ( uint8* )data, len, inByteSent, *inRemoteAddr );
 	return true;
 }
 

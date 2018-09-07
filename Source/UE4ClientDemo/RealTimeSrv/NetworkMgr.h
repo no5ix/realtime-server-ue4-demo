@@ -12,6 +12,7 @@
 #include "RealTimeSrvEntity.h"
 #include "DeliveryNotifyMgr.h"
 #include "WeightedTimedMovingAverage.h"
+#include "kcp_annotated/KcpSession.h"
 
 
 typedef std::unordered_map< int, RealTimeSrvEntityPtr > IntToGameObjectMap;
@@ -112,6 +113,8 @@ private:
 	void    UpdateSayingHello();
 	void    SendHelloPacket();
 
+	void DoSendPkt(const void* data, int len);
+
 private:
 
 	DeliveryNotifyMgr			mDeliveryNotificationManager;
@@ -170,4 +173,6 @@ private:
 
 	std::queue< ReceivedPacket, std::list< ReceivedPacket > >	mPacketQueue;
 
+	// kcp
+	std::unique_ptr<KcpSession> kcpSession_;
 };

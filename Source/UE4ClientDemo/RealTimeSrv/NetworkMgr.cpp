@@ -24,16 +24,21 @@ namespace
 }
 
 NetworkMgr::NetworkMgr() :
-	mDropPacketChance( 0.f ),
-	mSimulatedLatency( 0.f ),
-	mPlayerId( -1.f ),
-	mResetedPlayerId( -1.f ),
-	mDeliveryNotificationManager( true, false ),
-	mState( NCS_Uninitialized ),
-	mLastCheckDCTime( 0.f ),
-	mLastPacketFromSrvTime( 0.f ),
-	mIsReceivingSlicePacket( false ),
-	mNextExpectedSlicedPacketIndex( 0 ),
+	mDropPacketChance(0.f),
+	mSimulatedLatency(0.f),
+	mPlayerId(-1.f),
+	mResetedPlayerId(-1.f),
+	mDeliveryNotificationManager(true, false),
+	mState(NCS_Uninitialized),
+	mLastCheckDCTime(0.f),
+	mLastPacketFromSrvTime(0.f),
+	mIsReceivingSlicePacket(false),
+	mNextExpectedSlicedPacketIndex(0),
+	kcpSession_(new KcpSession(
+		KcpSession::RoleTypeE::kCli,
+		std::bind(&NetworkMgr::DoSendPkt, this, std::placeholders::_1, std::placeholders::_2),
+		[]() { return static_cast<IUINT32>(
+			RealTimeSrvTiming::sInstance->GetCurrentGameTime() * 1000); })),
 	mChunkPacketID( 0 )
 {
 	mSocket = NULL;
@@ -47,6 +52,8 @@ void NetworkMgr::StaticInit( const FString& inIP, int inPort )
 
 void NetworkMgr::Update()
 {
+	kcpSession_->Update();
+
 	ProcessIncomingPackets();
 
 	CheckForDisconnects();
@@ -71,18 +78,22 @@ void NetworkMgr::Init( const FString& inYourChosenSocketName, const FString& inI
 	mAvgRoundTripTime = WeightedTimedMovingAverage( 1.f );
 }
 
-
-void NetworkMgr::SendPacket( const OutputBitStream& inOutputStream )
+void NetworkMgr::DoSendPkt(const void* data, int len)
 {
 	int32 BytesSent = 0;
-	RealTimeSrvSocketUtil::SendTo( mSocket, inOutputStream, BytesSent, mRemoteAddr );
+	RealTimeSrvSocketUtil::SendTo(mSocket, data, len, BytesSent, mRemoteAddr);
 
 	if (BytesSent <= 0)
 	{
 		const FString Str = "Socket is valid but the receiver received 0 bytes, make sure it is listening properly!";
-		UE_LOG( LogTemp, Error, TEXT( "%s" ), *Str );
-		RealTimeSrvHelper::ScreenMsg( Str );
+		UE_LOG(LogTemp, Error, TEXT("%s"), *Str);
+		RealTimeSrvHelper::ScreenMsg(Str);
 	}
+}
+
+void NetworkMgr::SendPacket( const OutputBitStream& inOutputStream )
+{
+	kcpSession_->Send(inOutputStream.GetBufferPtr(), inOutputStream.GetByteLength());
 }
 
 void NetworkMgr::UpdateLastPacketFromSrvTime()
@@ -121,33 +132,46 @@ void NetworkMgr::ReadIncomingPacketsIntoQueue()
 	char ReceivedDataPacketMem[1024];
 	int32 packetSize = sizeof( ReceivedDataPacketMem );
 	InputBitStream inputStream( ReceivedDataPacketMem, packetSize * 8 );
-	int32 refReadByteCount = 0;
+	int32 refReadByteCount = 1;
+	int32 kcpRcvByteCount = 0;
 
 	TSharedRef<FInternetAddr> fromAddress = ISocketSubsystem::Get( PLATFORM_SOCKETSUBSYSTEM )->CreateInternetAddr();
 
 	int receivedPackedCount = 0;
 
-	while (receivedPackedCount < kMaxPacketsPerFrameCount)
+	//while (receivedPackedCount < kMaxPacketsPerFrameCount)
+	do
 	{
 		RealTimeSrvSocketUtil::RecvFrom( mSocket, ReceivedDataPacketMem, packetSize, refReadByteCount, fromAddress );
-
 		if (refReadByteCount == 0)
 		{
 			break;
 		}
 		else if (refReadByteCount > 0)
 		{
-			inputStream.ResetToCapacity( refReadByteCount );
-			++receivedPackedCount;
+			kcpRcvByteCount = kcpSession_->Recv(ReceivedDataPacketMem, refReadByteCount);
+			if (kcpRcvByteCount < 0)
+			{
+				//printf("kcpSession Recv failed, Recv() = %d \n", kcpRcvByteCount);
+				return;
+			}
+			else
+			{
+				if (kcpRcvByteCount > 0)
+				{
+					inputStream.ResetToCapacity(kcpRcvByteCount);
+					++receivedPackedCount;
 
-			float simulatedReceivedTime = RealTimeSrvTiming::sInstance->GetCurrentGameTime() + mSimulatedLatency;
-			mPacketQueue.emplace( simulatedReceivedTime, inputStream, fromAddress );
+					float simulatedReceivedTime = RealTimeSrvTiming::sInstance->GetCurrentGameTime() + mSimulatedLatency;
+					mPacketQueue.emplace(simulatedReceivedTime, inputStream, fromAddress);
+				}
+			}
 		}
 		else
 		{
 		}
 	}
-	
+	while (refReadByteCount);
 }
 
 void NetworkMgr::ProcessQueuedPackets()
@@ -235,8 +259,8 @@ void NetworkMgr::ProcessPacket( InputBitStream& inInputStream )
 		//)
 	//)
 	{
-
 		UpdateLastPacketFromSrvTime();
+
 		//if ( mDeliveryNotificationManager.ReadAndProcessState( inInputStream ) )
 		//{
 			uint32_t	packetType;
