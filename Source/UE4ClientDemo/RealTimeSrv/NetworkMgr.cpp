@@ -37,6 +37,7 @@ NetworkMgr::NetworkMgr() :
 	kcpSession_(new KcpSession(
 		KcpSession::RoleTypeE::kCli,
 		std::bind(&NetworkMgr::DoSendPkt, this, std::placeholders::_1, std::placeholders::_2),
+		std::bind(&NetworkMgr::DoRecvPkt, this, std::placeholders::_1),
 		[]() { return static_cast<IUINT32>(
 			RealTimeSrvTiming::sInstance->GetCurrentGameTime() * 1000); })),
 	mChunkPacketID( 0 )
@@ -126,53 +127,84 @@ void NetworkMgr::ProcessIncomingPackets()
 	UpdateBytesSentLastFrame();
 }
 
+int NetworkMgr::DoRecvPkt(char* rcvData)
+{
+	int32 refReadByteCount = 1;
+	TSharedRef<FInternetAddr> fromAddress = ISocketSubsystem::Get(PLATFORM_SOCKETSUBSYSTEM)->CreateInternetAddr();
+	RealTimeSrvSocketUtil::RecvFrom(mSocket, packetBuf_, kPacketBufSize, refReadByteCount, fromAddress);
+
+	rcvData = packetBuf_;
+	(void)rcvData;
+
+	return static_cast<int>(refReadByteCount);
+}
+
 void NetworkMgr::ReadIncomingPacketsIntoQueue()
 {
-
-	char ReceivedDataPacketMem[1024];
-	int32 packetSize = sizeof( ReceivedDataPacketMem );
-	InputBitStream inputStream( ReceivedDataPacketMem, packetSize * 8 );
-	int32 refReadByteCount = 1;
+	InputBitStream inputStream(packetBuf_, kPacketBufSize * 8);
 	int32 kcpRcvByteCount = 0;
 
-	TSharedRef<FInternetAddr> fromAddress = ISocketSubsystem::Get( PLATFORM_SOCKETSUBSYSTEM )->CreateInternetAddr();
-
-	int receivedPackedCount = 0;
-
-	//while (receivedPackedCount < kMaxPacketsPerFrameCount)
-	do
+	while (kcpSession_->Recv(packetBuf_, kcpRcvByteCount))
 	{
-		RealTimeSrvSocketUtil::RecvFrom( mSocket, ReceivedDataPacketMem, packetSize, refReadByteCount, fromAddress );
-		if (refReadByteCount == 0)
+		if (kcpRcvByteCount > 0)
 		{
-			break;
-		}
-		else if (refReadByteCount > 0)
-		{
-			kcpRcvByteCount = kcpSession_->Recv(ReceivedDataPacketMem, refReadByteCount);
-			if (kcpRcvByteCount < 0)
-			{
-				//printf("kcpSession Recv failed, Recv() = %d \n", kcpRcvByteCount);
-				return;
-			}
-			else
-			{
-				if (kcpRcvByteCount > 0)
-				{
-					inputStream.ResetToCapacity(kcpRcvByteCount);
-					++receivedPackedCount;
-
-					float simulatedReceivedTime = RealTimeSrvTiming::sInstance->GetCurrentGameTime() + mSimulatedLatency;
-					mPacketQueue.emplace(simulatedReceivedTime, inputStream, fromAddress);
-				}
-			}
+			inputStream.ResetToCapacity(kcpRcvByteCount);
+			float simulatedReceivedTime = RealTimeSrvTiming::sInstance->GetCurrentGameTime() + mSimulatedLatency;
+			mPacketQueue.emplace(simulatedReceivedTime, inputStream);
 		}
 		else
 		{
 		}
 	}
-	while (refReadByteCount);
 }
+
+//void NetworkMgr::ReadIncomingPacketsIntoQueue()
+//{
+//
+//	char ReceivedDataPacketMem[1024];
+//	int32 packetSize = sizeof( ReceivedDataPacketMem );
+//	InputBitStream inputStream( ReceivedDataPacketMem, packetSize * 8 );
+//	int32 refReadByteCount = 1;
+//	int32 kcpRcvByteCount = 0;
+//
+//	TSharedRef<FInternetAddr> fromAddress = ISocketSubsystem::Get( PLATFORM_SOCKETSUBSYSTEM )->CreateInternetAddr();
+//
+//	int receivedPackedCount = 0;
+//
+//	//while (receivedPackedCount < kMaxPacketsPerFrameCount)
+//	do
+//	{
+//		RealTimeSrvSocketUtil::RecvFrom( mSocket, ReceivedDataPacketMem, packetSize, refReadByteCount, fromAddress );
+//		if (refReadByteCount == 0)
+//		{
+//			break;
+//		}
+//		else if (refReadByteCount > 0)
+//		{
+//			kcpRcvByteCount = kcpSession_->Recv(ReceivedDataPacketMem, refReadByteCount);
+//			if (kcpRcvByteCount < 0)
+//			{
+//				//printf("kcpSession Recv failed, Recv() = %d \n", kcpRcvByteCount);
+//				return;
+//			}
+//			else
+//			{
+//				if (kcpRcvByteCount > 0)
+//				{
+//					inputStream.ResetToCapacity(kcpRcvByteCount);
+//					++receivedPackedCount;
+//
+//					float simulatedReceivedTime = RealTimeSrvTiming::sInstance->GetCurrentGameTime() + mSimulatedLatency;
+//					mPacketQueue.emplace(simulatedReceivedTime, inputStream, fromAddress);
+//				}
+//			}
+//		}
+//		else
+//		{
+//		}
+//	}
+//	while (refReadByteCount);
+//}
 
 void NetworkMgr::ProcessQueuedPackets()
 {

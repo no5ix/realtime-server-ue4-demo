@@ -114,6 +114,7 @@ private:
 	void    SendHelloPacket();
 
 	void DoSendPkt(const void* data, int len);
+	int DoRecvPkt(char* rcvData);
 
 private:
 
@@ -152,14 +153,16 @@ private:
 	class ReceivedPacket
 	{
 	public:
-		ReceivedPacket( float inReceivedTime, InputBitStream& inInputMemoryBitStream, const TSharedRef<FInternetAddr> inFromAddress ) : 
+		ReceivedPacket( float inReceivedTime, InputBitStream& inInputMemoryBitStream
+			//, const TSharedRef<FInternetAddr> inFromAddress 
+		) : 
 		    mReceivedTime( inReceivedTime ),
-			mFromAddress( inFromAddress ),
+			//mFromAddress( inFromAddress ),
 			mPacketBuffer( inInputMemoryBitStream )
 		{
 		}
 
-		const	TSharedRef<FInternetAddr>&			GetFromAddress()	const { return mFromAddress; }
+		//const	TSharedRef<FInternetAddr>&			GetFromAddress()	const { return mFromAddress; }
 		float					GetReceivedTime()	const { return mReceivedTime; }
 		InputBitStream&	GetPacketBuffer()   { return mPacketBuffer; }
 
@@ -167,7 +170,7 @@ private:
 
 		float					mReceivedTime;
 		InputBitStream	mPacketBuffer;
-		TSharedRef<FInternetAddr>			mFromAddress;
+		//TSharedRef<FInternetAddr>			mFromAddress;
 
 	};
 
@@ -175,4 +178,6 @@ private:
 
 	// kcp
 	std::unique_ptr<KcpSession> kcpSession_;
+	static const size_t kPacketBufSize = 1500;
+	char packetBuf_[kPacketBufSize];
 };
