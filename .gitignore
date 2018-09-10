@@ -1,6 +1,6 @@
 .history/
-Plugins/ServerRecast/*
-Plugins/*
+# Plugins/ServerRecast/*
+# Plugins/*
 
 # Visual Studio 2015 user specific files
 .vs/
