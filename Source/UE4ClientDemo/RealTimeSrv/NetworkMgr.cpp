@@ -95,7 +95,7 @@ void NetworkMgr::DoSendPkt(const void* data, int len)
 void NetworkMgr::SendPacket( const OutputBitStream& inOutputStream )
 {
 	kcpSession_->Send(inOutputStream.GetBufferPtr(), inOutputStream.GetByteLength()
-		, KcpSession::TransmitModeE::kUnreliable
+		//, KcpSession::TransmitModeE::kUnreliable
 	);
 }
 
@@ -467,19 +467,23 @@ void NetworkMgr::ReadLastMoveProcessedOnServerTimestamp( InputBitStream& inInput
 
 		InputMgr::sInstance->GetActionList().RemovedProcessedActions( mLastMoveProcessedByServerTimestamp );
 
-		// float currentTime = RealTimeSrvTiming::sInstance->GetCurrentGameTime();
+		 float currentTime = RealTimeSrvTiming::sInstance->GetCurrentGameTime();
 
-		// if ( currentTime > mTimeOfLastHello + kTimeBetweenPrintPing )
-		// {
-		// 	//R_MSG_M( 2.f, "ping = %f", mAvgRoundTripTime.GetValue() *1000.f );
-		// 	//GEngine->AddOnScreenDebugMessage( -1, 2.f, FColor::Red, FString::Printf( TEXT( "%s    %f" ), *FString( "ping" ), float( mAvgRoundTripTime.GetValue() *1000.f ) ) );
+		 if ( currentTime > mTimeOfLastHello + kTimeBetweenPrintPing )
+		 {
+			// print mAvgRoundTripTime		 
+		 	//GEngine->AddOnScreenDebugMessage( -1, 2.f, FColor::Red,
+				//FString::Printf( TEXT( "%s    %f" ), *FString( "ping" ),
+				//	float( mAvgRoundTripTime.GetValue() *1000.f ) ) );
 
-		// 	GEngine->AddOnScreenDebugMessage( -1, kTimeBetweenPrintPing, FColor::Red, 
-		// 		FString::Printf( TEXT( "%s    %f" ), 
-		// 		*FString( "ping" ), float( rtt *1000.f ) ) 
-		// 	);
-		// 	mTimeOfLastHello = currentTime;
-		// }
+			// print pure rtt
+			//GEngine->AddOnScreenDebugMessage(-1, kTimeBetweenPrintPing, FColor::Red,
+			//	FString::Printf(TEXT("%s    %f"),
+			//		*FString("ping"), float(rtt *1000.f))
+			//);
+
+		 	mTimeOfLastHello = currentTime;
+		 }
 	}
 
 }
