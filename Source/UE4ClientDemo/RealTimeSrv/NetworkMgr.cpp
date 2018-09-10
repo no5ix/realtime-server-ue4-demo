@@ -94,7 +94,9 @@ void NetworkMgr::DoSendPkt(const void* data, int len)
 
 void NetworkMgr::SendPacket( const OutputBitStream& inOutputStream )
 {
-	kcpSession_->Send(inOutputStream.GetBufferPtr(), inOutputStream.GetByteLength());
+	kcpSession_->Send(inOutputStream.GetBufferPtr(), inOutputStream.GetByteLength()
+		, KcpSession::TransmitModeE::kUnreliable
+	);
 }
 
 void NetworkMgr::UpdateLastPacketFromSrvTime()
