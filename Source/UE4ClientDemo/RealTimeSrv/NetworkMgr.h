@@ -12,7 +12,7 @@
 #include "RealTimeSrvEntity.h"
 #include "DeliveryNotifyMgr.h"
 #include "WeightedTimedMovingAverage.h"
-#include "kcp_annotated/KcpSession.h"
+#include "kcpsess/kcpsess.h"
 
 
 typedef std::unordered_map< int, RealTimeSrvEntityPtr > IntToGameObjectMap;
@@ -114,7 +114,7 @@ private:
 	void    SendHelloPacket();
 
 	void DoSendPkt(const void* data, int len);
-	int DoRecvPkt(char* rcvData);
+	kcpsess::KcpSession::InputData DoRecvPkt();
 
 private:
 
@@ -177,7 +177,8 @@ private:
 	std::queue< ReceivedPacket, std::list< ReceivedPacket > >	mPacketQueue;
 
 	// kcp
-	std::unique_ptr<KcpSession> kcpSession_;
+	kcpsess::KcpSession::InputData kcpsessInputData_;
+	std::unique_ptr<kcpsess::KcpSession> kcpSession_;
 	static const size_t kPacketBufSize = 1500;
 	char packetBuf_[kPacketBufSize];
 };

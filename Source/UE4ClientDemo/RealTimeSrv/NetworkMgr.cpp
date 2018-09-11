@@ -34,10 +34,10 @@ NetworkMgr::NetworkMgr() :
 	mLastPacketFromSrvTime(0.f),
 	mIsReceivingSlicePacket(false),
 	mNextExpectedSlicedPacketIndex(0),
-	kcpSession_(new KcpSession(
-		KcpSession::RoleTypeE::kCli,
+	kcpSession_(new kcpsess::KcpSession(
+		kcpsess::KcpSession::RoleTypeE::kCli,
 		std::bind(&NetworkMgr::DoSendPkt, this, std::placeholders::_1, std::placeholders::_2),
-		std::bind(&NetworkMgr::DoRecvPkt, this, std::placeholders::_1),
+		std::bind(&NetworkMgr::DoRecvPkt, this),
 		[]() { return static_cast<IUINT32>(
 			RealTimeSrvTiming::sInstance->GetCurrentGameTime() * 1000); })),
 	mChunkPacketID( 0 )
@@ -129,16 +129,15 @@ void NetworkMgr::ProcessIncomingPackets()
 	UpdateBytesSentLastFrame();
 }
 
-int NetworkMgr::DoRecvPkt(char* rcvData)
+kcpsess::KcpSession::InputData NetworkMgr::DoRecvPkt()
 {
-	int32 refReadByteCount = 1;
-	TSharedRef<FInternetAddr> fromAddress = ISocketSubsystem::Get(PLATFORM_SOCKETSUBSYSTEM)->CreateInternetAddr();
-	RealTimeSrvSocketUtil::RecvFrom(mSocket, packetBuf_, kPacketBufSize, refReadByteCount, fromAddress);
+	int32 refReadByteCount = 0;
+	TSharedRef<FInternetAddr> fromAddress = 
+		ISocketSubsystem::Get(PLATFORM_SOCKETSUBSYSTEM)->CreateInternetAddr();
+	RealTimeSrvSocketUtil::RecvFrom(mSocket, packetBuf_, kPacketBufSize,
+		refReadByteCount, fromAddress);
 
-	rcvData = packetBuf_;
-	(void)rcvData;
-
-	return static_cast<int>(refReadByteCount);
+	return kcpsessInputData_.SetAndReturnSelf(packetBuf_, refReadByteCount);
 }
 
 void NetworkMgr::ReadIncomingPacketsIntoQueue()
