@@ -6,7 +6,8 @@
 为[realtime-server](https://github.com/no5ix/realtime-server)而写的一个UE4状态同步demo
 
 
-![UE4DemoScreenshot.png](./img/UE4DemoScreenshot.png)
+![UE4DemoScreenshot.png](./img/UE4DemoScreenshot.gif)
+<!-- ![UE4DemoScreenshot.png](./img/UE4DemoScreenshot.png) -->
 
 
 
@@ -35,6 +36,9 @@
 - No replication component from UE4, just socket 没有用UE4的网络同步组件, 唯socket而已
 - UE4: 4.16 - 4.19
 - Server side 服务端 : [realtime-server example](https://github.com/no5ix/realtime-server/tree/master/example/for_ue4_demo)
+- Powered by 
+    - [realtime-server](https://github.com/no5ix/realtime-server) (A realtime dedicated game server, for FPS/MOBA)
+    - [kcpsess](https://github.com/no5ix/kcpsess) (A kcp session single-header-only implementation)
 
 
 # Usage
