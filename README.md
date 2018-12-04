@@ -38,7 +38,7 @@
 - Server side 服务端 : [realtime-server example](https://github.com/no5ix/realtime-server/tree/master/example/for_ue4_demo)
 - Powered by 
     - [realtime-server](https://github.com/no5ix/realtime-server) (A realtime dedicated game server, for FPS/MOBA)
-    - [kcpsess](https://github.com/no5ix/kcpsess) (A kcp session single-header-only implementation)
+    - [kcpp](https://github.com/no5ix/kcpp) (A kcp session single-header-only implementation, dynamic redundancy + reliable/unreliable channel)
 
 
 # Usage
